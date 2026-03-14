@@ -1,37 +1,103 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse CSS gradients by Bold Outlook. Search visually appealing gradients, preview each design, and copy ready-to-use CSS code.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#5caf47">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CSS Gradients by Bold Outlook">
+  <meta property="og:description" content="A polished CSS gradient library with quick preview, search, and one-click copy.">
+  <meta property="og:url" content="https://css-gradients.boldoutlook.com/">
+  <meta property="og:image" content="https://www.boldoutlook.com/content/images/size/w1200/2025/06/Bold-Outlook-Favicon.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CSS Gradients by Bold Outlook">
+  <meta name="twitter:description" content="Search, preview, and copy CSS gradients in a cleaner, more visual experience.">
+  <link rel="canonical" href="https://css-gradients.boldoutlook.com/">
   <link rel="icon" href="https://www.boldoutlook.com/content/images/size/w256h256/2025/06/Bold-Outlook-Favicon.png" type="image/png">
-  <title>CSS Gradients</title>
+  <title>CSS Gradients by Bold Outlook</title>
   <link rel="stylesheet" href="./style.css">
-  <!-- Google tag (gtag.js) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "CSS Gradients by Bold Outlook",
+      "description": "A searchable collection of CSS gradients with visual previews and copy-ready CSS.",
+      "url": "https://css-gradients.boldoutlook.com/",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Bold Outlook",
+        "url": "https://www.boldoutlook.com/"
+      }
+    }
+  </script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-X1B0Q53PK1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-  
     gtag('config', 'G-X1B0Q53PK1');
   </script>
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2079625064533995"
-       crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2079625064533995" crossorigin="anonymous"></script>
 </head>
 <body>
-<header>
-        <h1>CSS Gradients</h1>
-      <p>A collection of visually appealing gradients.</p>
-    </header>
-    <main>
-        <section class="library" id="gradient-collection">
-            <div class="gradient-grid" id="gradientGrid"></div>
-        </section>
-    </main>
-<footer>
-      <p>&copy; 2024-2025 <a href="https://www.boldoutlook.com/">Bold Outlook</a>. All rights reserved.</p>
-    </footer>
-  <script  src="./script.js"></script>
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
+  <header class="site-header">
+    <div class="container hero">
+      <div class="hero-copy">
+        <p class="eyebrow"><a href="https://www.boldoutlook.com" title="Bold Outlook">Bold Outlook</a> resource</p>
+        <h1>CSS Gradients</h1>
+        <p class="hero-text">Explore a curated gradient library for interfaces, landing pages, backgrounds, and digital products. Preview each gradient instantly and copy production-ready CSS with one click.</p>
+        <div class="hero-meta" aria-label="Library details">
+          <span class="meta-pill"><strong id="gradient-total">0</strong> gradients</span>
+          <span class="meta-pill">Ready-to-copy CSS</span>
+          <span class="meta-pill">Search by hex or keyword</span>
+        </div>
+      </div>
+      <aside class="hero-card">
+        <h2>Quick tip</h2>
+        <p>Use the search bar to find gradients by color code or gradient type, then copy the full CSS declaration directly into your project.</p>
+      </aside>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="controls-wrap">
+      <div class="container controls" role="search" aria-label="Gradient search and filters">
+        <label class="search-field" for="gradient-search">
+          <span class="search-label">Search gradients</span>
+          <input id="gradient-search" type="search" placeholder="Search by hex, linear-gradient, or color values" autocomplete="off">
+        </label>
+        <div class="toolbar-actions">
+          <button id="clear-search" type="button" class="button">Clear</button>
+          <button id="toggle-view" type="button" class="button" aria-pressed="false">Compact view</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="container results-bar" aria-live="polite">
+      <p id="results-count">Showing 0 gradients</p>
+    </section>
+
+    <section class="container library-section">
+      <div id="empty-state" class="empty-state" hidden>
+        <h2>No gradients found</h2>
+        <p>Try a different hex code or clear the search to browse the full collection.</p>
+      </div>
+      <div class="gradient-grid" id="gradientGrid" aria-label="CSS gradient library"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>CSS Gradients by <a href="https://www.boldoutlook.com/">Bold Outlook</a>.</p>
+      <p class="footer-note"></p>
+    </div>
+  </footer>
+
+  <div id="copied-alert" class="alert-box" role="status" aria-live="polite" hidden></div>
+  <script src="./script.js"></script>
 </body>
 </html>

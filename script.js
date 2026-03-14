@@ -100,30 +100,100 @@ document.addEventListener("DOMContentLoaded", function() {
     ];
 
     const gradientGrid = document.getElementById("gradientGrid");
+    const gradientSearch = document.getElementById("gradient-search");
+    const clearSearchButton = document.getElementById("clear-search");
+    const toggleViewButton = document.getElementById("toggle-view");
+    const resultsCount = document.getElementById("results-count");
+    const gradientTotal = document.getElementById("gradient-total");
+    const emptyState = document.getElementById("empty-state");
+    const copiedAlert = document.getElementById("copied-alert");
 
-    gradients.forEach(gradient => {
-        const gradientBox = document.createElement("div");
-        gradientBox.classList.add("gradient-box");
-        gradientBox.style.background = gradient;
-        gradientBox.addEventListener("click", () => {
-            navigator.clipboard.writeText(`background: ${gradient};`).then(() => {
-                showAlert("Gradient CSS copied to clipboard!");
-            });
-        });
-        gradientGrid.appendChild(gradientBox);
-    });
+    gradientTotal.textContent = gradients.length;
+
+    function getGradientType(gradient) {
+        const colorCount = (gradient.match(/#/g) || []).length;
+        return colorCount >= 3 ? "3-color gradient" : "2-color gradient";
+    }
+
+    function buildGradientCard(gradient, index) {
+        const gradientType = getGradientType(gradient);
+        const cssDeclaration = `background: ${gradient};`;
+
+        return `
+            <article class="gradient-card" data-gradient="${gradient.toLowerCase()}">
+                <button class="gradient-preview" type="button" style="background:${gradient};" data-copy="${cssDeclaration}" aria-label="Copy CSS for gradient ${index + 1}"></button>
+                <div class="card-body">
+                    <span class="gradient-badge">Gradient ${index + 1}</span>
+                    <h2 class="gradient-title">${gradientType}</h2>
+                    <p class="gradient-meta">Click the preview or button below to copy the full CSS declaration.</p>
+                    <pre class="code-block"><code>${cssDeclaration}</code></pre>
+                    <div class="card-actions">
+                        <span class="gradient-index">#${String(index + 1).padStart(3, "0")}</span>
+                        <button class="copy-button" type="button" data-copy="${cssDeclaration}">Copy CSS</button>
+                    </div>
+                </div>
+            </article>
+        `;
+    }
+
+    function renderGradients() {
+        const query = gradientSearch.value.trim().toLowerCase();
+        const filtered = gradients
+            .map((gradient, index) => ({ gradient, index }))
+            .filter(({ gradient }) => gradient.toLowerCase().includes(query));
+
+        gradientGrid.innerHTML = filtered
+            .map(({ gradient, index }) => buildGradientCard(gradient, index))
+            .join("");
+
+        resultsCount.textContent = `Showing ${filtered.length} ${filtered.length === 1 ? "gradient" : "gradients"}`;
+        emptyState.hidden = filtered.length !== 0;
+    }
+
+    async function copyToClipboard(text) {
+        try {
+            await navigator.clipboard.writeText(text);
+        } catch (error) {
+            const helper = document.createElement("textarea");
+            helper.value = text;
+            document.body.appendChild(helper);
+            helper.select();
+            document.execCommand("copy");
+            document.body.removeChild(helper);
+        }
+    }
 
     function showAlert(message) {
-        let alertBox = document.querySelector(".alert-box");
-        if (!alertBox) {
-            alertBox = document.createElement("div");
-            alertBox.classList.add("alert-box");
-            document.body.appendChild(alertBox);
-        }
-        alertBox.textContent = message;
-        alertBox.classList.add("show");
-        setTimeout(() => {
-            alertBox.classList.remove("show");
-        }, 2000);
+        copiedAlert.textContent = message;
+        copiedAlert.hidden = false;
+        window.clearTimeout(showAlert.timeoutId);
+        showAlert.timeoutId = window.setTimeout(() => {
+            copiedAlert.hidden = true;
+        }, 2200);
     }
+
+    gradientSearch.addEventListener("input", renderGradients);
+
+    clearSearchButton.addEventListener("click", () => {
+        gradientSearch.value = "";
+        renderGradients();
+        gradientSearch.focus();
+    });
+
+    toggleViewButton.addEventListener("click", () => {
+        const isCompact = document.body.classList.toggle("compact-view");
+        toggleViewButton.setAttribute("aria-pressed", String(isCompact));
+        toggleViewButton.textContent = isCompact ? "Expanded view" : "Compact view";
+    });
+
+    gradientGrid.addEventListener("click", async (event) => {
+        const target = event.target.closest("[data-copy]");
+        if (!target) return;
+
+        const cssValue = target.dataset.copy;
+        await copyToClipboard(cssValue);
+        showAlert("Gradient CSS copied to clipboard.");
+    });
+
+    renderGradients();
 });
